@@ -1,15 +1,15 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-
+const path = require('path');
 const usersRoutes = require('./routes/users');
 const stuffRoutes = require('./routes/stuff');
-
 
 mongoose.connect('mongodb+srv://SpArOw:znrjDV35Nmx1qR8a@cluster0.6q837te.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
+  
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 
@@ -24,5 +24,5 @@ app.use((req, res, next) => {
 
 app.use('/api/auth', usersRoutes);
 app.use('/api/stuff', stuffRoutes);
-
+app.use('/images', express.static(path.join(__dirname, 'images')))
 module.exports = app;
