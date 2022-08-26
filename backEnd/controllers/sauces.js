@@ -1,6 +1,6 @@
 //const sauces = require('../models/sauces');
 const Sauce = require('../models/sauces');
-
+const fs = require('fs');
 exports.createSauce = (req, res, next) => {
 
     const sauceObject = JSON.parse(req.body.sauce);
@@ -40,7 +40,7 @@ exports.modifySauce = (req, res, next) => {
  };
 
  exports.deleteSauce = (req, res, next) => {
-    Thing.findOne({ _id: req.params.id})
+    Sauce.findOne({ _id: req.params.id})
         .then(sauce => {
             if (sauce.userId != req.auth.userId) {
                 res.status(401).json({message: 'Not authorized'});
