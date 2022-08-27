@@ -23,3 +23,7 @@ node server
 
 Dev :
 nodemon server
+
+
+Démarrer le front :
+npm run start
