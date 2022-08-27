@@ -20,6 +20,7 @@ exports.signup = (req, res, next) => {
 
 
   exports.login = (req, res, next) => {
+    const secret_token = process.env.SECRET_TOKEN;
     User.findOne({ email: req.body.email })
 
     
@@ -36,7 +37,7 @@ exports.signup = (req, res, next) => {
                         userId: user._id,
                         token: jwt.sign(
                             { userId: user._id },
-                            'random_token_secret',
+                            secret_token,
                             { expiresIn: '24h' }
                         )
                     });
