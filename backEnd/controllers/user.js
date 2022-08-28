@@ -8,9 +8,7 @@ exports.signup = (req, res, next) => {
         const user = new User({
           email: req.body.email,
           password: hash
-        });//console.log(password);
-
-        
+        });       
         user.save()
           .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
           .catch(error => res.status(400).json({ error }));
@@ -23,7 +21,6 @@ exports.signup = (req, res, next) => {
     const secret_token = process.env.SECRET_TOKEN;
     User.findOne({ email: req.body.email })
 
-    
         .then(user => {console.log(user)
             if (!user) {
                 return res.status(401).json({ error: 'Utilisateur non trouvé !' });
