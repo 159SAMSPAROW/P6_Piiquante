@@ -6,8 +6,10 @@ Technologies utilisées
 Node.js
 Express
 MongoDB
+
+
 Variables d'environnement
-Avant de lancer ce projet, vous devrez ajouter les variables d'environnement suivantes dans un fichier .env
+Avant de lancer ce projet, vous devrez ajouter la variable d'environnement suivantes dans un fichier .env dans le dossier backend
 
 SECRET_TOKEN
 
