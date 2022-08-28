@@ -10,8 +10,7 @@ exports.createSauce = (req, res, next) => {
     const sauce = new Sauce({
         ...sauceObject,
         // host (le nom d'hôte)
-        imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename
-            }`,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         // Initialisation 
         likes: 0,
         dislikes: 0,
