@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
-exports.signup = (req, res, next) => {
+exports.signup = (req, res, next) => {//Middleware qui permet de créer un nouvel utilisateur en cryptant son mot de passe
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({
@@ -17,9 +17,9 @@ exports.signup = (req, res, next) => {
   };
 
 
-  exports.login = (req, res, next) => {
-    const secret_token = process.env.SECRET_TOKEN;
-    User.findOne({ email: req.body.email })
+  exports.login = (req, res, next) => {//Middleware qui permet d' authentifier un utilisateur en récupérant la variable 
+    const secret_token = process.env.SECRET_TOKEN;//d' environement, puis en recherchant par adresse mail si existant, puis 
+    User.findOne({ email: req.body.email })//en comparant les hash des password
   
         .then(user => {//console.log(user)
             if (!user) {
