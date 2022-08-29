@@ -11,8 +11,11 @@ MongoDB
 Variables d'environnement
 Avant de lancer ce projet, vous devrez ajouter les variables d'environnement suivantes dans un fichier .env dans le dossier backend:
 
-SECRET_TOKEN
+SECRET_TOKEN et
 PORT
+
+
+
 Installation du backend:
 Installer les dépendances back et front:
 npm install
