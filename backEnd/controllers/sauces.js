@@ -5,7 +5,7 @@ const fs = require('fs');
 exports.createSauce = (req, res, next) => {
     // In nous faut parser(chaîne de caractères)
     const sauceObject = JSON.parse(req.body.sauce);
-    console.log(req.body.sauce);
+    
 
     const sauce = new Sauce({
         ...sauceObject,
@@ -16,7 +16,8 @@ exports.createSauce = (req, res, next) => {
         dislikes: 0,
         usersLiked: [],
         usersDisliked: [],
-    });
+        
+    });console.log(req.body.sauce);
     sauce.save()
         .then(() => res.status(201).json({ message: "Sauce enregistrée !" }))
         .catch((error) => res.status(400).json({ error }));
@@ -109,7 +110,7 @@ exports.likeDislikeSauce = (req, res, next) => {
             /* retrait du disliked d'une sauce */
             if (sauce.usersDisliked.includes(req.body.userId) && req.body.like === 0) {
                 Sauce.updateOne({ _id: req.params.id }, { $inc: { dislikes: -1 }, $pull: { usersDisliked: req.body.userId } })
-                    .then(() => res.status(200).json({ message: 'change my mind ' }))
+                    .then(() => res.status(200).json({ message: 'sauce undisliked' }))
                     .catch(error => res.status(400).json({ error }));
             }
 

@@ -39,14 +39,17 @@ mongoose.connect('mongodb+srv://SpArOw:znrjDV35Nmx1qR8a@cluster0.6q837te.mongodb
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 //Appel de la fonction middleware intégrée dans Express qui analyse les requêtes JSON entrantes et place les données analysées dans req.body.
+
 app.use(express.json());
 
 app.use(helmet({CrossOriginResourcePolicy: { policy: "same-site"}}));
+
 /////Middlware de définition des headers
+//Seules les demandes provenant du même site peuvent lire la ressource et  la protection contre certaines demandes d'autres origines
 //Accéder à notre API depuis n'importe quelle origine ( '*' ) ;
 //Ajouter les headers mentionnés aux requêtes envoyées vers notre API (Origin , X-Requested-With , etc.) ;
 //Envoyer des requêtes avec les méthodes mentionnées ( GET ,POST , etc.).
-//Seules les demandes provenant du même site peuvent lire la ressource et  la protection contre certaines demandes d'autres origines
+
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Resource-Policy", "same-site");
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -55,8 +58,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 app.use('/api/auth', usersRoutes);
 app.use('/api/sauces', stuffRoutes);
-app.use('/images',express.static(path.join(__dirname,'images')));
+
 
 module.exports = app;
