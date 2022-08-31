@@ -39,11 +39,9 @@ mongoose.connect('mongodb+srv://SpArOw:znrjDV35Nmx1qR8a@cluster0.6q837te.mongodb
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 //Appel de la fonction middleware intégrée dans Express qui analyse les requêtes JSON entrantes et place les données analysées dans req.body.
-
 app.use(express.json());
 
 app.use(helmet({CrossOriginResourcePolicy: { policy: "same-site"}}));
-
 /////Middlware de définition des headers
 //Seules les demandes provenant du même site peuvent lire la ressource et  la protection contre certaines demandes d'autres origines
 //Accéder à notre API depuis n'importe quelle origine ( '*' ) ;

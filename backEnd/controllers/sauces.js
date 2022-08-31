@@ -6,7 +6,6 @@ exports.createSauce = (req, res, next) => {
     // In nous faut parser(chaîne de caractères)
     const sauceObject = JSON.parse(req.body.sauce);
     
-
     const sauce = new Sauce({
         ...sauceObject,
         // host (le nom d'hôte)
@@ -85,7 +84,7 @@ exports.likeDislikeSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
 
-            /* like d'une sauce */
+            // like d'une sauce */
             // si userliked n'est pas présent dans le body de userId et que le like dans le body n'est pas strictement = à 1
             if (!sauce.usersLiked.includes(req.body.userId) && req.body.like === 1) {
                 Sauce.updateOne({ _id: req.params.id }, { $inc: { likes: 1 }, $push: { usersLiked: req.body.userId } })
