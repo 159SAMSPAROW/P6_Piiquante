@@ -26,6 +26,17 @@ const mongoose = require('mongoose');//Importation de Mongoose mappeur de docume
 const path = require('path');//Importation du module path. 
 //Le module Path permet de travailler avec des répertoires et des chemins de fichiers.
 
+const rateLimit = require('express-rate-limit')// limite le nombre de connexion à l'app
+
+const apiLimiter = rateLimit({// Définition des règles de limitation
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 100, // Limite chaque IP à 100 requêtes par `window` (ici, par 15 minutes ) 
+	standardHeaders: true, // Renvoie les informations de limite de débit dans les en-têtes `RateLimit-*` 
+	legacyHeaders: false, // Désactive les en-têtes `X-RateLimit-*`
+})
+
+
+
 //Importation des routes
 const usersRoutes = require('./routes/user');
 const stuffRoutes = require('./routes/sauces');
@@ -59,6 +70,9 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 //Ajout des middleware d' utilisation des routeurs
 app.use('/api/auth', usersRoutes);
 app.use('/api/sauces', stuffRoutes);
+
+//
+app.use('/api', apiLimiter)
 
 //Exportation de l' application
 module.exports = app;
