@@ -1,8 +1,10 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const  checkPassword = require('password-validator');
 
 exports.signup = (req, res, next) => {//Middleware qui permet de créer un nouvel utilisateur en cryptant son mot de passe
+   
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({

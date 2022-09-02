@@ -31,7 +31,7 @@ const usersRoutes = require('./routes/user');
 const stuffRoutes = require('./routes/sauces');
 
 //Connection a la base de donnée
-mongoose.connect('mongodb+srv://SpArOw:znrjDV35Nmx1qR8a@cluster0.6q837te.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect(process.env.mongoDB_Access,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -42,24 +42,23 @@ mongoose.connect('mongodb+srv://SpArOw:znrjDV35Nmx1qR8a@cluster0.6q837te.mongodb
 app.use(express.json());
 
 app.use(helmet({CrossOriginResourcePolicy: { policy: "same-site"}}));
-/////Middlware de définition des headers
-//Seules les demandes provenant du même site peuvent lire la ressource et  la protection contre certaines demandes d'autres origines
-//Accéder à notre API depuis n'importe quelle origine ( '*' ) ;
-//Ajouter les headers mentionnés aux requêtes envoyées vers notre API (Origin , X-Requested-With , etc.) ;
-//Envoyer des requêtes avec les méthodes mentionnées ( GET ,POST , etc.).
 
+/////Middlware de définition des headers
 app.use((req, res, next) => {
-  res.setHeader("Cross-Origin-Resource-Policy", "same-site");
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.setHeader("Cross-Origin-Resource-Policy", "same-site");//Seules les demandes provenant du même site peuvent lire la ressource et  la protection contre certaines demandes d'autres origines
+  res.setHeader('Access-Control-Allow-Origin', '*');//Accéder à notre API depuis n'importe quelle origine ( '*' ) ;
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');//Ajouter les headers mentionnés aux requêtes envoyées vers notre API (Origin , X-Requested-With , etc.) ;
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');//Envoyer des requêtes avec les méthodes mentionnées ( GET ,POST , etc.).
   next();
 });
 
+//Ajout d' un middleware pour servir des fichiers statiques à l' application Express
+//La méthode path.join() joint les segments de chemin spécifiés en un seul chemin.
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
+//Ajout des middleware d' utilisation des routeurs
 app.use('/api/auth', usersRoutes);
 app.use('/api/sauces', stuffRoutes);
 
-
+//Exportation de l' application
 module.exports = app;

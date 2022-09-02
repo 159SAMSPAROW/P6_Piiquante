@@ -1,28 +1,32 @@
+//Importation du modelsauce
 const Sauce = require('../models/sauces');
-const fs = require('fs');
 
+//Permet d'avoir accès aux différentes opérations liées au système de fichiers
+const fs = require('fs'); 
 
+//Fonction pour créer une sauce
 exports.createSauce = (req, res, next) => {
-    // In nous faut parser(chaîne de caractères)
+    //On récupère la convertion du contenu de l' objet sauce en json 
     const sauceObject = JSON.parse(req.body.sauce);
-    
+    //On créer l' objet sauce  
     const sauce = new Sauce({
-        ...sauceObject,
-        // host (le nom d'hôte)
+        ...sauceObject,// la syntaxe de propagation énumère les propriétés d'un objet et ajoute les paires clé-valeur à l'objet en cours de création.
+        //On défini la forme de l' url que l' on va enregistrer dans l' objet
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-        // Initialisation 
+        //Initialisation des clé que l' on va pouvoir incrémenter 
         likes: 0,
         dislikes: 0,
         usersLiked: [],
         usersDisliked: [],
         
     });console.log(req.body.sauce);
-    sauce.save()
+    sauce.save()//La fonction save() est utilisée pour enregistrer dans le système de fichiers par téléchargement.
         .then(() => res.status(201).json({ message: "Sauce enregistrée !" }))
         .catch((error) => res.status(400).json({ error }));
 };
-
+//Fonction pour modifier la sauce 
 exports.modifySauce = (req, res, next) => {
+    
     const sauceObject = req.file ? {
         ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
