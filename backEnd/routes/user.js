@@ -1,9 +1,10 @@
 const express = require('express');
 const router =  express.Router();
 const userCtrl = require('../controllers/user');
-const password = require('../middleware/password_validator')
+const password = require('../middleware/password_validator');
+const rateLimit = require('../middleware/rate-limit');
 
-router.post('/signup',password, userCtrl.signup);
-router.post('/login', userCtrl.login);
+router.post('/signup', rateLimit, password, userCtrl.signup);
+router.post('/login', rateLimit, userCtrl.login);
 
 module.exports = router;
