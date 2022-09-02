@@ -29,8 +29,8 @@ const path = require('path');//Importation du module path.
 const rateLimit = require('express-rate-limit')// limite le nombre de connexion à l'app
 
 const apiLimiter = rateLimit({// Définition des règles de limitation
-	windowMs: 15 * 60 * 1000, // 15 minutes
-	max: 100, // Limite chaque IP à 100 requêtes par `window` (ici, par 15 minutes ) 
+	windowMs: 60 * 60 * 1000, // 60 minutes
+	max: 100, // Limite chaque IP à 100 requêtes 
 	standardHeaders: true, // Renvoie les informations de limite de débit dans les en-têtes `RateLimit-*` 
 	legacyHeaders: false, // Désactive les en-têtes `X-RateLimit-*`
 })
