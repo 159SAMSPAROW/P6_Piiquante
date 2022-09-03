@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const saucesSchema = mongoose.Schema({
+const saucesSchema = mongoose.Schema({//Schema des clé : valeur requise 
 
     userId: { type: String, required: true },
     name: { type: String, required: true },

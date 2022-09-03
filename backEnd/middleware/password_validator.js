@@ -1,32 +1,27 @@
-//const { default: mongoose } = require("mongoose");
+
 const PasswordValidator = require("password-validator");
 
 const passwordSchema = new PasswordValidator();
 
-// Pré-requis mot de passe
-
-passwordSchema
+passwordSchema// Pré-requis mot de passe
   .is()
-  .min(8) // Minimum length 8
+  .min(8) // Minimum caractère 8
   .is()
-  .max(16) // Maximum length 16
+  .max(16) // Maximum caractère 16
   .has()
-  .uppercase(1) // Must have uppercase letters 1
+  .uppercase(1) // Doit contenir 1 lettre majuscule
   .has()
-  .lowercase() // Must have lowercase letters
+  .lowercase() 
   .has()
-  .digits(2) // Must have at least 2 digits
+  .digits(2) // Doit contenir 2 chiffres
   .has()
   .not()
-  .spaces() // Should not have spaces
+  .spaces() 
   .is()
   .not()
-  .oneOf(["Password", "Password123"]); // Blacklist these values
-
-// module.exports = mongoose.model('password', passwordSchema);
+  .oneOf(["Password", "Password123"]); // Interdire ces valeurs
 
 // Validation du mot de passe en fonction de son schéma pour le SignUp
-
 module.exports = (req, res, next) => {
   if (passwordSchema.validate(req.body.password)) {
     next();

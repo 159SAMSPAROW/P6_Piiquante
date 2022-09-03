@@ -31,7 +31,7 @@ exports.modifySauce = (req, res, next) => {
         ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
-  
+    
     delete sauceObject._userId;
     Sauce.findOne({_id: req.params.id})
         .then((sauce) => {
@@ -41,13 +41,14 @@ exports.modifySauce = (req, res, next) => {
                 Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id})
                 .then(() => res.status(200).json({message : 'Objet modifié!'}))
                 .catch(error => res.status(401).json({ error }));
-            }
+            }  
         })
+
         .catch((error) => {
             res.status(400).json({ error });
         });
  };
-
+//Effacé une sauce 
  exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id})
         .then(sauce => {
@@ -73,7 +74,6 @@ exports.getOneSauce = (req, res, next) => {
             res.status(404).json({ message: error.message });
         });
 };
-
 //Récupération des sauces
 exports.getAllSauce = (req, res, next) => {
     Sauce.find()
@@ -83,6 +83,7 @@ exports.getAllSauce = (req, res, next) => {
             res.status(404).json({ message: error.message });
         });
 };
+//Fonction de likes et dislikes
 exports.likeDislikeSauce = (req, res, next) => {
     console.log(req.body)
     Sauce.findOne({ _id: req.params.id })
