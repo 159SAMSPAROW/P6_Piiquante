@@ -1,23 +1,12 @@
+
+
 require('dotenv').config();//Importation du module dotenv pour charger les variables d' environnement 
-                           //et sa fonction config qui lit le fichier .env et l' affecte a process.env
+//et sa fonction config qui lit le fichier .env et l' affecte a process.env
 
 const helmet = require('helmet');//Importation helmet.js aide à sécuriser les applications express. 
-                                 //Il configure divers en-têtes HTTP pour 
-                                 // empêcher les attaques telles que Cross-Site-Scripting (XSS), clickjacking, etc.
 
-const express = require('express');//Importation d' express, Il fournit des mécanismes pour :
-                                  
-//-Écrire des fonctions de traitement pour différentes requêtes HTTP répondant à différentes URI (par le biais des routes).
-                                 
-//-Intégrer avec les moteurs de rendu de « vues » dans le but de générer des
-//réponses en insérant des données dans des modèles (« templates »).
-                                  
-//-Configurer certains paramètres d'applications comme le port à utiliser à la connexion et
-//l'emplacement des modèles nécessaires pour la mise en forme de la réponse.
-                                  
-//-Ajouter des requêtes de traitement « middleware » (intergiciel) où vous le voulez dans
-//le tunnel gestionnaire de la requête
 
+const express = require('express');//Importation d' express
 const app = express();//Création de l' application express
 
 const mongoose = require('mongoose');//Importation de Mongoose mappeur de document objet (ODM). 
@@ -26,33 +15,43 @@ const mongoose = require('mongoose');//Importation de Mongoose mappeur de docume
 const path = require('path');//Importation du module path. 
 //Le module Path permet de travailler avec des répertoires et des chemins de fichiers.
 
-
 //Importation des routes
 const usersRoutes = require('./routes/user');
 const stuffRoutes = require('./routes/sauces');
 
+const { PORT, errorHandler } = require('./config'); 
+
+app.on('error', errorHandler);// Config : Port, Erreurs
+app.on('listening', () => {
+const address = app.address();
+const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
+console.log('Listening on ' + bind);
+});
 //Connection a la base de donnée
 mongoose.connect(process.env.mongoDB_Access,
-  { useNewUrlParser: true,
-    useUnifiedTopology: true })
-  .then(() => console.log('Connexion à MongoDB réussie !'))
-  
-  .catch(() => console.log('Connexion à MongoDB échouée !'));
+{ useNewUrlParser: true,
+useUnifiedTopology: true })
+.then(() => console.log('Connexion à MongoDB réussie !'))
+
+.catch(() => console.log('Connexion à MongoDB échouée !'));
 
 //Appel de la fonction middleware intégrée dans Express qui analyse les requêtes JSON entrantes et place les données analysées dans req.body.
 app.use(express.json());
 
-app.use(helmet({CrossOriginResourcePolicy: { policy: "same-site"}}));
+app.use(helmet());//Police de lecture des requêtes en provenance uniquement  du même site
 
 /////Middlware de définition des headers
 app.use((req, res, next) => {
-  res.setHeader("Cross-Origin-Resource-Policy", "same-site");//Seules les demandes provenant du même site peuvent lire la ressource et  la protection contre certaines demandes d'autres origines
-  res.setHeader('Access-Control-Allow-Origin', '*');//Accéder à notre API depuis n'importe quelle origine ( '*' ) ;
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');//Ajouter les headers mentionnés aux requêtes envoyées vers notre API (Origin , X-Requested-With , etc.) ;
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');//Envoyer des requêtes avec les méthodes mentionnées ( GET ,POST , etc.).
-  next();
-});
-
+//seule les demande provenant du même site
+res.setHeader('Cross-Origin-Resource-Policy', 'same-site')
+// Accéder à notre API depuis n'importe quelle origine
+res.setHeader('Access-Control-Allow-Origin', '*');
+// Ajouter les headers mentionnés aux requêtes envoyées vers notre API
+res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+// Envoyer des requêtes avec les méthodes mentionnées
+res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+next();
+})
 //Ajout d' un middleware pour servir des fichiers statiques à l' application Express
 //La méthode path.join() joint les segments de chemin spécifiés en un seul chemin.
 app.use('/images', express.static(path.join(__dirname, 'images')));
@@ -61,7 +60,10 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/auth', usersRoutes);
 app.use('/api/sauces', stuffRoutes);
 
-//
+app.listen(process.env.PORT, function(){
+
+console.log("Server listening on PORT", process.env.PORT);
+});
 
 //Exportation de l' application
 module.exports = app;

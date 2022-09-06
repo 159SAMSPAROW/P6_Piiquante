@@ -9,10 +9,11 @@ MongoDB
 
 
 Variables d'environnement
-Avant de lancer ce projet, vous devrez ajouter et définir les variables d'environnement suivantes dans un fichier .env dans le dossier backend:
+Avant de lancer ce projet, vous devrez ajouter et définir les variables d'environement suivantes dans un fichier .env dans le dossier backend:
 
-SECRET_TOKEN et
-PORT
+SECRET_TOKEN,
+PORT,
+mongoDB_Access
 
 
 
@@ -29,3 +30,4 @@ nodemon server
 
 Démarrer le front :
 npm run start
+

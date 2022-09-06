@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');//Permet de créer des token d' identificati
 const secret_token = process.env.SECRET_TOKEN;
 
 module.exports = (req, res, next) => {//middleware qui vérifie si l’utilisateur est bien connecté et transmet 
-                                      //les informations de connexion aux différentes méthodes qui vont gérer les requêtes.
+                                      //les informations de connexion 
     try {
        const token = req.headers.authorization.split(' ')[1];//split permet de tout récupérer après l'espace dans le header
        const decodedToken = jwt.verify(token, secret_token);//Verify est utiliser pour décoder notre token

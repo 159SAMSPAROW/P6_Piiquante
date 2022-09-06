@@ -6,21 +6,20 @@ const fs = require('fs');
 
 //Fonction pour créer une sauce
 exports.createSauce = (req, res, next) => {
-    //On récupère la convertion du contenu de l' objet sauce en json 
+    
     const sauceObject = JSON.parse(req.body.sauce);
-    //On créer l' objet sauce  
+      
     const sauce = new Sauce({
-        ...sauceObject,// la syntaxe de propagation énumère les propriétés d'un objet et ajoute les paires clé-valeur à l'objet en cours de création.
-        //On défini la forme de l' url que l' on va enregistrer dans l' objet
+        ...sauceObject,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-        //Initialisation des clé que l' on va pouvoir incrémenter 
+        
         likes: 0,
         dislikes: 0,
         usersLiked: [],
         usersDisliked: [],
         
     });console.log(req.body.sauce);
-    sauce.save()//La fonction save() est utilisée pour enregistrer dans le système de fichiers par téléchargement.
+    sauce.save()
         .then(() => res.status(201).json({ message: "Sauce enregistrée !" }))
         .catch((error) => res.status(400).json({ error }));
 };
@@ -89,7 +88,7 @@ exports.likeDislikeSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
 
-            // like d'une sauce */
+            // like d'une sauce 
             // si userliked n'est pas présent dans le body de userId et que le like dans le body n'est pas strictement = à 1
             if (!sauce.usersLiked.includes(req.body.userId) && req.body.like === 1) {
                 Sauce.updateOne({ _id: req.params.id }, { $inc: { likes: 1 }, $push: { usersLiked: req.body.userId } })
@@ -97,21 +96,21 @@ exports.likeDislikeSauce = (req, res, next) => {
                     .catch(error => res.status(400).json({ error }));
             }
 
-            /* unlike d'une sauce */
+            // unlike d'une sauce 
             if (sauce.usersLiked.includes(req.body.userId) && req.body.like === 0) {
                 Sauce.updateOne({ _id: req.params.id }, { $inc: { likes: -1 }, $pull: { usersLiked: req.body.userId } })
                     .then(() => res.status(200).json({ message: 'sauce unliked ' }))
                     .catch(error => res.status(400).json({ error }));
             }
 
-            /* disliked d'une sauce */
+            // disliked d'une sauce 
             if (!sauce.usersDisliked.includes(req.body.userId) && req.body.like === -1) {
                 Sauce.updateOne({ _id: req.params.id }, { $inc: { dislikes: 1 }, $push: { usersDisliked: req.body.userId } })
                     .then(() => res.status(200).json({ message: 'sauce dislike ' }))
                     .catch(error => res.status(400).json({ error }));
             }
 
-            /* retrait du disliked d'une sauce */
+            // retrait du disliked d'une sauce 
             if (sauce.usersDisliked.includes(req.body.userId) && req.body.like === 0) {
                 Sauce.updateOne({ _id: req.params.id }, { $inc: { dislikes: -1 }, $pull: { usersDisliked: req.body.userId } })
                     .then(() => res.status(200).json({ message: 'sauce undisliked' }))
