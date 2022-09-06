@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {//middleware qui vérifie si l’utilisate
                                       //les informations de connexion 
     try {
        const token = req.headers.authorization.split(' ')[1];//split permet de tout récupérer après l'espace dans le header
-       const decodedToken = jwt.verify(token, secret_token);//Verify est utiliser pour décoder notre token
+       const decodedToken =  jwt.verify(token, secret_token);//Verify est utiliser pour décoder notre token
        const userId = decodedToken.userId;
        req.auth = {// extraction de l'ID utilisateur du token 
            userId: userId

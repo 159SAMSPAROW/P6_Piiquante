@@ -3,9 +3,9 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 require('password-validator');
 
-exports.signup = (req, res, next) => {//Middleware qui permet de créer et de sauvegarder un nouvel utilisateur en cryptant son mot de passe
+exports.signup =  (req, res) => {//Middleware qui permet de créer et de sauvegarder un nouvel utilisateur en cryptant son mot de passe
    
-    bcrypt.hash(req.body.password, 10)
+   bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({
           email: req.body.email,
@@ -19,7 +19,7 @@ exports.signup = (req, res, next) => {//Middleware qui permet de créer et de sa
 };
 
 
-exports.login = (req, res, next) => {//Middleware qui permet d' authentifier un utilisateur en récupérant la variable 
+exports.login = (req, res) => {//Middleware qui permet d' authentifier un utilisateur en récupérant la variable 
     const secret_token = process.env.SECRET_TOKEN;//d' environement, puis en recherchant par adresse mail si existant dans la bdd, puis 
     User.findOne({ email: req.body.email })//en comparant les hashs des password
   
