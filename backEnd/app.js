@@ -19,14 +19,6 @@ const path = require('path');//Importation du module path.
 const usersRoutes = require('./routes/user');
 const stuffRoutes = require('./routes/sauces');
 
-const { PORT, errorHandler } = require('./config'); 
-
-app.on('error', errorHandler);// Config : Port, Erreurs
-app.on('listening', () => {
-const address = app.address();
-const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
-console.log('Listening on ' + bind);
-});
 //Connection a la base de donnée
 mongoose.connect(process.env.mongoDB_Access,
 { useNewUrlParser: true,
@@ -41,15 +33,16 @@ app.use(express.json());
 app.use(helmet());//Police de lecture des requêtes en provenance uniquement  du même site
 
 /////Middlware de définition des headers
+
 app.use((req, res, next) => {
-//seule les demande provenant du même site
-res.setHeader('Cross-Origin-Resource-Policy', 'same-site')
-// Accéder à notre API depuis n'importe quelle origine
-res.setHeader('Access-Control-Allow-Origin', '*');
-// Ajouter les headers mentionnés aux requêtes envoyées vers notre API
-res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-// Envoyer des requêtes avec les méthodes mentionnées
-res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+
+res.setHeader('Cross-Origin-Resource-Policy', 'same-site');//seule les demande provenant du même site
+
+res.setHeader('Access-Control-Allow-Origin', '*');// Accéder à notre API depuis n'importe quelle origine
+
+res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');// Ajouter les headers mentionnés aux requêtes envoyées vers notre API
+
+res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');// Envoyer des requêtes avec les méthodes mentionnées
 next();
 })
 //Ajout d' un middleware pour servir des fichiers statiques à l' application Express
